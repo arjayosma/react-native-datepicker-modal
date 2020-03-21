@@ -1,205 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import PropTypes from 'prop-types';
 import {
-  DatePickerAndroid,
-  DatePickerIOS,
-  Platform,
-  Text,
-  TouchableOpacity,
+  Button,
   Modal,
-  View,
+  Platform,
   StyleSheet,
+  TouchableOpacity,
   ViewPropTypes,
-  Button
-} from 'react-native'
-import PropTypes from 'prop-types'
+  View
+} from 'react-native';
 
-const isAndroid = Platform.OS === 'android'
-
-function noop () {}
-
-/**
- * React Native DatePicker Modal Component for iOS/Android
- */
-class DatePicker extends Component {
-    state = {
-      showIOSModal: false,
-      date: undefined
-    }
-
-    static defaultProps = {
-      renderDate: ({ year, month, day, date }) => {
-        if (date) {
-          const str = `${year}-${month}-${day}`
-          return <Text>{str}</Text>
-        }
-
-        return null
-      },
-      startDate: new Date(),
-      onError: noop,
-      onDateChanged: noop,
-      maxDate: new Date(32519532187368),
-      minDate: new Date(0),
-      modalButtonText: 'Done'
-    }
-
-    static propTypes = {
-      /**
-         * Render Component for date. Receives object with selected `date`, `year`, `day` and `month`
-         */
-      renderDate: PropTypes.func,
-      /**
-         * Start date for DatePicker (Default: Current Date `new Date()`).
-         */
-      startDate: PropTypes.instanceOf(Date),
-      /**
-         * Function called with error argument if there is error setting date:
-         *
-         * @example
-         * ```js
-         * function onError(error) {
-         *    console.log(error)
-         * }
-         */
-      onError: PropTypes.func,
-      /**
-         * Function called when new date has been selected. Receives object with selected `date`, `year`, `day` and `month`.
-         */
-      onDateChanged: PropTypes.func,
-      /**
-         * Minimum date that can be selected.
-         */
-      minDate: PropTypes.instanceOf(Date),
-      /**
-         * Maximum date that can be selected.
-         */
-      maxDate: PropTypes.instanceOf(Date),
-      /**
-         * Text for the iOS modal button (default: "Done").
-         */
-      modalButtonText: PropTypes.string,
-      /**
-         * Styles for the modal overlay.
-         */
-      modalOverlayStyle: ViewPropTypes.style,
-      /**
-         * Styles for the modal.
-         */
-      modalStyle: ViewPropTypes.style,
-      /**
-         * Styles for the modal button.
-         */
-      modalButtonStyle: ViewPropTypes.style,
-      /**
-         * Styles for the modal button container.
-         */
-      modalBtnContainer: ViewPropTypes.style,
-      /**
-         * Styles for the container of `renderDate`.
-         */
-      style: ViewPropTypes.style
-    }
-
-    handlePressed = async () => {
-      const { startDate, onError, minDate, maxDate } = this.props
-      const { date } = this.state
-
-      if (isAndroid) {
-        try {
-          const { action, year, month, day } = await DatePickerAndroid.open({
-            date: date || startDate,
-            minDate: minDate,
-            maxDate: maxDate
-          })
-
-          const newDate = new Date(year, month, day)
-
-          if (action !== DatePickerAndroid.dismissedAction) {
-            this.setState(() => ({ date: newDate, startDate: newDate }))
-            this.props.onDateChanged(this.getDateObj())
-          }
-        } catch (error) {
-          onError(error)
-        }
-      } else {
-        this.setState(() => ({ showIOSModal: true }))
-      }
-    }
-
-    getDateObj = () => {
-      const { date } = this.state
-
-      return {
-        date,
-        year: date ? date.getFullYear() : '',
-        day: date ? `${date.getDate()}`.padStart(2, '0') : '',
-        month: date ? `${date.getMonth() + 1}`.padStart(2, '0') : ''
-      }
-    }
-
-    handleModalClose = () => {
-      this.setState(
-        () => ({ showIOSModal: false }),
-        () => {
-          const { onDateChanged } = this.props
-          onDateChanged(this.getDateObj())
-        }
-      )
-    }
-
-    handleDateChange = date => this.setState({ date, startDate: date })
-
-    render () {
-      const { showIOSModal, date } = this.state
-
-      const {
-        startDate,
-        maxDate,
-        minDate,
-        modalButtonText,
-        renderDate,
-        modalOverlayStyle,
-        modalStyle,
-        modalButtonStyle,
-        modalBtnContainer,
-        style,
-        ...props
-      } = this.props
-
-      return (
-        <TouchableOpacity style={style} onPress={this.handlePressed}>
-          <Modal
-            animationType='slide'
-            transparent
-            visible={showIOSModal}
-            onRequestClose={this.handleModalClose}
-          >
-            <View style={[styles.overlay, modalOverlayStyle]}>
-              <View style={[styles.modal, modalStyle]}>
-                <View style={[styles.modalBtnContainer, modalBtnContainer]}>
-                  <Button
-                    style={[modalButtonStyle]}
-                    title={modalButtonText}
-                    onPress={this.handleModalClose}
-                  />
-                </View>
-                <DatePickerIOS
-                  mode='date'
-                  date={date || startDate}
-                  onDateChange={this.handleDateChange}
-                  maximumDate={maxDate}
-                  minimumDate={minDate}
-                  {...props}
-                />
-              </View>
-            </View>
-          </Modal>
-          {renderDate(this.getDateObj())}
-        </TouchableOpacity>
-      )
-    }
-}
-
+const isAndroid = Platform.OS === 'android';
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
@@ -207,8 +19,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end'
   },
-  modal: { backgroundColor: '#fff', height: 260, width: '100%' },
-  modalBtnContainer: {
+  modal: { backgroundColor: '#333333', height: 260, width: '100%' },
+  modalButtonContainer: {
     width: '100%',
     alignItems: 'center',
     flexDirection: 'row',
@@ -216,6 +28,124 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginTop: 15
   }
-})
+});
 
-export default DatePicker
+const Wrapper = ({ children, condition, wrapper }) =>
+  condition ? wrapper(children) : children;
+
+const ModalWrapper = ({
+  children,
+  close,
+  show,
+  modalOverlayStyle,
+  modalStyle,
+  modalButtonContainer,
+  modalButtonStyle,
+  modalButtonText
+}) => (
+  <Modal
+    animationType="slide"
+    transparent
+    visible={show}
+    onRequestClose={close}
+  >
+    <View style={[styles.overlay, modalOverlayStyle]}>
+      <View style={[styles.modal, modalStyle]}>
+        <View style={[styles.modalButtonContainer, modalButtonContainer]}>
+          <Button
+            style={[modalButtonStyle]}
+            title={modalButtonText}
+            onPress={close}
+          />
+        </View>
+        {children}
+      </View>
+    </View>
+  </Modal>
+);
+
+export default DateTimePickerModal = ({
+  children,
+  onChange,
+  touchableStyle,
+  modalOverlayStyle,
+  modalStyle,
+  modalButtonContainer,
+  modalButtonStyle,
+  modalButtonText,
+  show,
+  toggle,
+  value,
+  ...props
+}) => {
+  return (
+    <>
+      <TouchableOpacity style={touchableStyle} onPress={toggle}>
+        {children}
+      </TouchableOpacity>
+      <Wrapper
+        condition={!isAndroid}
+        wrapper={children => (
+          <ModalWrapper
+            show={show}
+            close={toggle}
+            modalOverlayStyle={modalOverlayStyle}
+            modalStyle={modalStyle}
+            modalButtonContainer={modalButtonContainer}
+            modalButtonStyle={modalButtonStyle}
+            modalButtonText={modalButtonText}
+          >
+            {children}
+          </ModalWrapper>
+        )}
+      >
+        {show && (
+          <DateTimePicker
+            {...props}
+            value={value}
+            onChange={(event, date) => {
+              if (isAndroid) {
+                toggle();
+              }
+
+              if (date) {
+                onChange(event, date);
+              }
+            }}
+          />
+        )}
+      </Wrapper>
+    </>
+  );
+};
+
+DateTimePickerModal.defaultProps = {
+  modalButtonText: 'Done'
+};
+
+DateTimePickerModal.propTypes = {
+  /**
+   * Text for the iOS modal button (default: "Done").
+   */
+  modalButtonText: PropTypes.string,
+  /**
+   * Styles for the modal overlay.
+   */
+  modalOverlayStyle: ViewPropTypes.style,
+  /**
+   * Styles for the modal.
+   */
+  modalStyle: ViewPropTypes.style,
+  /**
+   * Styles for the modal button.
+   */
+  modalButtonStyle: ViewPropTypes.style,
+  /**
+   * Styles for the modal button container.
+   */
+  modalButtonContainer: ViewPropTypes.style,
+  /**
+   * Styles for the container of the rendered date/time.
+   */
+  touchableStyle: ViewPropTypes.style
+};

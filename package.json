@@ -1,10 +1,10 @@
 {
-  "name": "react-native-datepicker-modal",
-  "version": "1.3.0",
-  "description": "React Native DatePicker Modal Component for iOS/Android",
+  "name": "react-native-datetimepicker-modal",
+  "version": "1.0.0",
+  "description": "React Native DateTimePicker Modal Component for iOS/Android. Forked from https://github.com/tiaanduplessis/react-native-datepicker-modal and contains a major dependency on https://github.com/react-native-community/datetimepicker.",
   "main": "index.js",
-  "repository": "https://github.com/tiaanduplessis/react-native-datepicker-modal.git",
-  "author": "Tiaan du Plessis",
+  "repository": "https://github.com/arjayosma/react-native-datetimepicker-modal.git",
+  "author": "Arjay Osma",
   "license": "MIT",
   "scripts": {
     "lint": "standard --fix *.js"
@@ -14,13 +14,14 @@
     "react-native": "*"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^2.3.0",
     "prop-types": "^15.6.2"
   },
   "keywords": [
     "react",
     "react-native",
-    "datepicker",
-    "datepicker-component"
+    "datetimepicker",
+    "datetimepicker-component"
   ],
   "devDependencies": {
     "babel-eslint": "10.0.2",

@@ -3,7 +3,8 @@
   <img width="30%" src="android-example.png" alt="android">
 </div>
 
-# react-native-datepicker-modal
+# react-native-datetimepicker-modal
+
 [![package version](https://img.shields.io/npm/v/react-native-datepicker-modal.svg?style=flat-square)](https://npmjs.org/package/react-native-datepicker-modal)
 [![package downloads](https://img.shields.io/npm/dm/react-native-datepicker-modal.svg?style=flat-square)](https://npmjs.org/package/react-native-datepicker-modal)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
@@ -22,7 +23,7 @@
 
 ## Install
 
-This project uses [node](https://nodejs.org) and [npm](https://www.npmjs.com). 
+This project uses [node](https://nodejs.org) and [npm](https://www.npmjs.com).
 
 ```sh
 $ npm install react-native-datepicker-modal
@@ -33,29 +34,33 @@ $ yarn add react-native-datepicker-modal
 ## Usage
 
 ```js
-import React from 'react'
-import { StyleSheet, Text } from 'react-native'
+import React from 'react';
+import { StyleSheet, Text } from 'react-native';
 
-import ModalDatePicker from 'react-native-datepicker-modal'
+import ModalDatePicker from 'react-native-datepicker-modal';
 
-import colors from './config/colors'
-import spacing from './config/spacing'
-import fontSize from './config/fontSize'
+import colors from './config/colors';
+import spacing from './config/spacing';
+import fontSize from './config/fontSize';
 
 const DatePicker = ({ style, ...props }) => (
   <ModalDatePicker
     style={[styles.container, style]}
     renderDate={({ year, month, day, date }) => {
       if (!date) {
-        return <Text style={[styles.text, styles.placeholderText]}>Date of birth</Text>
+        return (
+          <Text style={[styles.text, styles.placeholderText]}>
+            Date of birth
+          </Text>
+        );
       }
 
-      const dateStr = `${day}-${month}-${year}`
-      return <Text style={styles.text}>{dateStr}</Text>
+      const dateStr = `${day}-${month}-${year}`;
+      return <Text style={styles.text}>{dateStr}</Text>;
     }}
     {...props}
   />
-)
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -79,10 +84,9 @@ const styles = StyleSheet.create({
     fontSize: fontSize.medium,
     color: colors.gray.dark
   }
-})
+});
 
-export default DatePicker
-
+export default DatePicker;
 ```
 
 ## Properties
@@ -121,21 +125,22 @@ Text string for the iOS modal button (default: "Done")
 
 Styling for different sub-components can also be configured:
 
-| Name                        | Description                                               |
-| --------------------------- | --------------------------------------------------------- |
-| style                       | Styles for the container of `renderDate`                  |
-| modalButtonStyle            | Styles for the modal button on iOS                        |
-| modalBtnContainerStyle      | Styles for the modal button container on iOS              |
-| modalStyle                  | Styles for the modal on iOS                               |
-| modalOverlayStyle           | Styles for the modal overlay on iOS                       |
+| Name                   | Description                                  |
+| ---------------------- | -------------------------------------------- |
+| style                  | Styles for the container of `renderDate`     |
+| modalButtonStyle       | Styles for the modal button on iOS           |
+| modalBtnContainerStyle | Styles for the modal button container on iOS |
+| modalStyle             | Styles for the modal on iOS                  |
+| modalOverlayStyle      | Styles for the modal overlay on iOS          |
 
 Styling on Android:
 
-We use `DatePickerAndroid` is and API for the native DatePicker Android module and this cannot be directly styled through JS props like real React Native components. 
+We use `DatePickerAndroid` is and API for the native DatePicker Android module and this cannot be directly styled through JS props like real React Native components.
 
-However, you can style the native android modules by changing the styles.xml in your android folder. It is located at `android/app/src/main/res/values/styles.xml` relative to your react-native project. 
+However, you can style the native android modules by changing the styles.xml in your android folder. It is located at `android/app/src/main/res/values/styles.xml` relative to your react-native project.
 
 Example:
+
 ```xml
 <resources xmlns:tools="http://schemas.android.com/tools">
 
@@ -159,10 +164,9 @@ Example:
 
 1. Fork it and create your feature branch: git checkout -b my-new-feature
 2. Commit your changes: git commit -am 'Add some feature'
-3.Push to the branch: git push origin my-new-feature 
-4. Submit a pull request
+   3.Push to the branch: git push origin my-new-feature
+3. Submit a pull request
 
 ## License
 
 MIT
-    
